@@ -226,6 +226,8 @@ def remove_model_prefixes(spec):
     for k, v in spec['definitions'].items():
         if k.startswith("io.k8s"):
             models[k] = {"split_n": 2}
+        elif os.environ.get("CLASS_NAME_SEGMENT_LENGTH") or False:
+            models[k] = {"split_n": int(os.environ.get("CLASS_NAME_SEGMENT_LENGTH"))}
 
     conflict = True
     while conflict:

@@ -37,7 +37,9 @@ set -o pipefail
 : "${PACKAGE_NAME?Must set PACKAGE_NAME env var}"
 : "${OPENAPI_GENERATOR_COMMIT?Must set OPENAPI_GENERATOR_COMMIT env var}"
 
-output_dir=$1
+output_dir=${OUTPUT_DIR}
+
+
 pushd "${output_dir}" > /dev/null
 output_dir=`pwd`
 popd > /dev/null
@@ -79,7 +81,8 @@ popd
 mkdir -p "${output_dir}"
 
 echo "--- Downloading and pre-processing OpenAPI spec"
-python "${SCRIPT_ROOT}/preprocess_spec.py" "${CLIENT_LANGUAGE}" "${KUBERNETES_BRANCH}" "${output_dir}/swagger.json" "${USERNAME}" "${REPOSITORY}"
+CLASS_NAME_SEGMENT_LENGTH=${CLASS_NAME_SEGMENT_LENGTH:-} \
+python "${SCRIPT_ROOT}/preprocess_spec.py" "${CLIENT_LANGUAGE}" "${KUBERNETES_BRANCH}" "${output_dir}/swagger.json" "${USERNAME}" "${REPOSITORY}" 
 
 echo "--- Cleaning up previously generated folders"
 for i in ${CLEANUP_DIRS}; do
@@ -88,7 +91,7 @@ for i in ${CLEANUP_DIRS}; do
 done
 
 echo "--- Generating client ..."
-mvn -f "${SCRIPT_ROOT}/generation_params.xml" clean generate-sources \
+mvn -f "${SCRIPT_ROOT}" clean generate-sources \
     -Dgenerator.spec.path="${output_dir}/swagger.json" \
     -Dgenerator.output.path="${output_dir}" \
     -D=generator.client.version="${CLIENT_VERSION}" \

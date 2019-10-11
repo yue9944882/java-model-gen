@@ -1,5 +1,5 @@
-<project
-  xmlns="http://maven.apache.org/POM/4.0.0"
+<project 
+  xmlns="http://maven.apache.org/POM/4.0.0" 
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.kubernetes</groupId>
@@ -10,24 +10,23 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.openapitools</groupId>
-        <artifactId>openapi-generator-maven-plugin</artifactId>
-        <version>${openapi-generator-version}</version>
+        <groupId>io.swagger</groupId>
+        <artifactId>swagger-codegen-maven-plugin</artifactId>
+        <version>${swagger-codegen-version}</version>
         <executions>
           <execution>
             <goals>
               <goal>generate</goal>
             </goals>
             <configuration>
-              <inputSpec>${generator.spec.path}</inputSpec>
-              <language>java</language>
-              <gitUserId>kubernetes-client</gitUserId>
-              <gitRepoId>client-java</gitRepoId>
-              <skipValidateSpec>true</skipValidateSpec>
               <generateApis>false</generateApis>
               <generateModelTests>false</generateModelTests>
               <generateModelDocumentation>false</generateModelDocumentation>
               <generateSupportingFiles>false</generateSupportingFiles>
+              <inputSpec>${generator.spec.path}</inputSpec>
+              <language>java</language>
+              <gitUserId>kubernetes-client</gitUserId>
+              <gitRepoId>client-java</gitRepoId>
               <configOptions>
                 <projectName>kubernetes-java-client</projectName>
                 <projectDescription>Java client for Kubernetes.</projectDescription>
@@ -42,6 +41,7 @@
                 <artifactId>client-java</artifactId>
                 <artifactVersion>1.0-SNAPSHOT</artifactVersion>
                 <sourceFolder>src/main/java</sourceFolder>
+                <localVariablePrefix></localVariablePrefix>
                 <serializableModel>false</serializableModel>
                 <bigDecimalAsString>false</bigDecimalAsString>
                 <fullJavaUtil>false</fullJavaUtil>
@@ -49,7 +49,6 @@
                 <dateLibrary>joda</dateLibrary>
                 <useRxJava>false</useRxJava>
                 <library>okhttp-gson</library>
-                <useReflectionEqualsHashCode>true</useReflectionEqualsHashCode>
                 <type-mappings>intstr.IntOrString=IntOrString,resource.Quantity=Quantity</type-mappings>
                 <import-mappings>
                   IntOrString=io.kubernetes.client.custom.IntOrString,Quantity=io.kubernetes.client.custom.Quantity,V1Patch=io.kubernetes.client.custom.V1Patch
@@ -70,9 +69,9 @@
       <version>${swagger-annotations-version}</version>
     </dependency>
     <dependency>
-      <groupId>org.openapitools</groupId>
-      <artifactId>openapi-generator-maven-plugin</artifactId>
-      <version>${openapi-generator-version}</version>
+      <groupId>io.swagger</groupId>
+      <artifactId>swagger-codegen-maven-plugin</artifactId>
+      <version>2.2.2</version>
     </dependency>
   </dependencies>
   <properties>
