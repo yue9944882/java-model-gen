@@ -12,7 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM yue9944882/openapi-gen
+FROM maven:3.5-jdk-8-slim
+
+ARG OPENAPI_GENERATOR_COMMIT
+ARG GENERATION_XML_FILE
+ARG OPENAPI_GENERATOR_USER_ORG=OpenAPITools
+
+# Install preprocessing script requirements
+RUN apt-get update && apt-get -y install git python-pip && pip install urllib3==1.24.2
+
+# Check out specific commit of openapi-generator
+RUN mkdir /source && \
+    cd /source && \
+    git clone -n https://github.com/${OPENAPI_GENERATOR_USER_ORG}/openapi-generator.git && \
+    cd openapi-generator && \
+    git checkout $OPENAPI_GENERATOR_COMMIT
+
+RUN mkdir /.npm && chmod -R go+rwx /.npm && chmod -R go+rwx /root && umask 0 && cd /source/openapi-generator && \
+    mvn install -DskipTests -Dmaven.test.skip=true -pl modules/openapi-generator-maven-plugin -am && \
+    cp -r /root/.m2/* /usr/share/maven/ref
 
 COPY openapi-generator/generate_client_in_container.sh /generate_client_in_container.sh
 COPY preprocess_spec.py /
