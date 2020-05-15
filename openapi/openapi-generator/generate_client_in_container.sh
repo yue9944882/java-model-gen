@@ -103,4 +103,8 @@ mkdir -p "${output_dir}/.openapi-generator"
 echo "Requested Commit: ${OPENAPI_GENERATOR_COMMIT}" > "${output_dir}/.openapi-generator/COMMIT"
 echo "Actual Commit: ${OPENAPI_GENERATOR_COMMIT_ACTUAL}" >> "${output_dir}/.openapi-generator/COMMIT"
 
+
+echo "--- Revising references to upstream kubernetes client" 
+grep 'apiVersion' -rl ${output_dir} | xargs -I {} \
+  sed  -i -r 's/import \S+IoK8sApimachineryPkgApisMetaV1(Object|List)Meta/import io.kubernetes.client.openapi.models.V1\1Meta/g;s/IoK8sApimachineryPkgApisMetaV1(Object|List)Meta/V1\1Meta/g;' {}
 echo "---Done."
